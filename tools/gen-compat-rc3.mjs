@@ -163,7 +163,29 @@ const r17 = [
   "\t}",
 ].join("\n");
 
+// #82 的锚点在桌面主进程（resources/app/lib/main.js）。
+// rc.3 把 mime 类型表插到了 import 与 home-paths region 之间，原来相邻的两行锚点断成两段。
+// 插入块是顶层语句，不依赖后面的 region 注释，所以只拿 import 行当锚点。
+const shellMain = path.resolve(BASE, "../../../lib/main.js");
+const p82 = fs
+  .readFileSync(shellMain, "utf8")
+  .split("\n")
+  .find((l) =>
+    l === 'import { REMOTE_STREAM_MUX_PATH, parseRemoteStreamServerMessage } from "@deepseek-ai/dsh-api-gateway/stream-protocol";');
+if (!p82) throw new Error("#82 锚点未找到：" + shellMain);
+const r82 = [
+  p82,
+  "// [dsh-purge-82] 双击 exe 从 explorer 继承 env 时常缺 DSH_PROFILE",
+  '// → host 子进程 "cannot determine the boot profile" → cordis 不加载',
+  "// → dsh-purge 插件没 activate → __dshPurgeHungPrompt 空 → inject 全断。兜底默认 desktop。",
+  'if (typeof process !== "undefined" && process.env && !process.env.DSH_PROFILE) process.env.DSH_PROFILE = "desktop";',
+].join("\n");
+
 const rules = {
+  82: {
+    note: "0.2.2 在 import 与 home-paths region 之间插入 mime 类型表，两行锚点断成两段",
+    replacements: [{ pattern: p82, replace: r82 }],
+  },
   17: { note: "0.2.2 把 editIntent 的读前检查抽成 requirePresent()", replacements: [{ pattern: p17, replace: r17 }] },
   13: { note: "0.2.2 把升级异常改成 SandboxEscalationError + 错误码", replacements: [{ pattern: p13, replace: r13 }] },
   14: { note: "同上：approver.request 参数结构未变，仅异常处理跟着改", replacements: [{ pattern: p14, replace: r14 }] },
