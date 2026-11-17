@@ -1,3 +1,25 @@
+# 1.1.71-rc3.1
+
+## 中文
+
+- 版本 **1.1.71-rc3.1**。
+- 兼容 DSH 0.2.2-rc.3：0.2.2 拆包/迁包后，15 处清洗锚点与 `#17` 的编辑门禁静默失配。本版补上 rc.3 锚点，rc.2 锚点原样保留，两边命中哪个用哪个，不写版本判断。
+- 新增 `dev-context` / `deliverable-file-references` / `tool-executor-ptc` / `dsh-tools-pipeline` 四个目标文件映射。
+- 红队预设移除 `toolFilter`：0.2.2 的 `dsh-tool-subagent` 见到该字段即硬抛，整份预设注册失败、下拉里选不中。
+- `#56` / `#77` / `#80` 因上游移除对应实现而退役（不是打不上，是无处可打）。
+- `--status` 在宿主仍封在 `app.asar` 时不再刷一屏 `undefined`。
+- 版本号必须与 `1.1.71` 不同：`installed-rev` 里的 `apply:1.1.71` 会让 settle 判定已对齐而跳过重打。
+
+## English
+
+- **1.1.71-rc3.1**.
+- DSH 0.2.2-rc.3 compatibility: package splits/moves silently broke 15 anchors plus `#17`'s edit gate. rc.3 anchors added; rc.2 anchors kept — whichever matches wins, no version branching.
+- New target files: `dev-context`, `deliverable-file-references`, `tool-executor-ptc`, `dsh-tools-pipeline`.
+- Red-team preset drops `toolFilter`: `dsh-tool-subagent` on 0.2.2 hard-throws on that field, which fails the whole preset.
+- `#56` / `#77` / `#80` retired (upstream removed the code they patched).
+- `--status` no longer prints a screen of `undefined` while the host is still sealed in `app.asar`.
+- The version string must differ from `1.1.71`: a stale `apply:1.1.71` in `installed-rev` makes settle treat the host as already aligned and skip re-applying.
+
 # 1.1.71
 
 ## 中文

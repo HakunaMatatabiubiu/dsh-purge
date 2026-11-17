@@ -4,7 +4,7 @@
 
 <h1 align="center">⚔️ DeepSeek Harness 网络安全红队工具（dsh-purge）</h1>
 
-<p align="center"><strong>Version 1.1.72</strong></p>
+<p align="center"><strong>Version 1.1.71-rc3.1</strong></p>
 
 <p align="center">
   <em>DeepSeek Harness 破甲：让所有模型都能破甲，不同模型可换不同提示词；默认提示词面向国模「小码酱」。Jailbreak for every model — swap prompts per model. 求 Star 收藏 ⭐ 如要二开，请查看署名要求部分</em>
@@ -33,7 +33,7 @@
 
 > **官方 Web 和官方桌面端都支持。** 官方 `dsh web` 用 profile `web`；官方桌面 EXE（DeepSeek Harness **0.2.0-rc.2 ~ 0.2.2-rc.3**）用 profile `desktop`。两边分开安装、分开点「应用」。当前版本只适配 dsh 0.2；更早的 dsh 用对应的老版本插件。社区桌面端不维护。
 >
-> **1.1.72：兼容 0.2.2-rc.3。** 0.2.2 拆包/迁包后，15 处清洗锚点（沙箱升级豁免、提示词净化、审批 fail-open、主循环装配等）以及 `#17` 的编辑门禁会静默失配；本版把 rc.3 的锚点补进补丁表，rc.2 的锚点原样保留，两边命中哪个用哪个。另外 0.2.2 的 `dsh-tool-subagent` 只要见到 `toolFilter` 就硬抛，红队预设已移除该字段。`#56`/`#77`/`#80` 因上游移除对应实现而退役。
+> **1.1.71-rc3.1：兼容 0.2.2-rc.3。** 0.2.2 拆包/迁包后，15 处清洗锚点（沙箱升级豁免、提示词净化、审批 fail-open、主循环装配等）以及 `#17` 的编辑门禁会静默失配；本版把 rc.3 的锚点补进补丁表，rc.2 的锚点原样保留，两边命中哪个用哪个。另外 0.2.2 的 `dsh-tool-subagent` 只要见到 `toolFilter` 就硬抛，红队预设已移除该字段。`#56`/`#77`/`#80` 因上游移除对应实现而退役。
 >
 > 写进 profile 还不会改宿主。点会话标题旁的 **dsh-purge** → **清洗** → **应用**。成功会自动重启；补丁没打完不重启。重启后新开一轮对话，注入才进当前会话。
 >
