@@ -24,11 +24,19 @@ function printStatus(state) {
   out.push(`  注入文件       ${state.override_path}`);
   out.push(`  注入状态       ${state.override_status}`);
   out.push("");
-  out.push(`  补丁 ${state.patches_applied}/${core.ALL_PATCHES.length} 已清洗, ${state.patches_pending} 待清洗`);
-  for (const p of core.ALL_PATCHES) {
-    const s = state.patch_status[p.id];
-    const mark = s === "applied" ? "✓" : s === "pending" ? "✗" : "·";
-    out.push(`    ${mark} [#${String(p.id).padEnd(2)}] ${p.name.padEnd(30)} ${p.layer}/${p.layer_en} — ${s}`);
+  // 官方桌面版宿主封在 app.asar 里时 ai_base 为空，patch_status 也是空的。
+  // 这种情况下逐条打印只会得到一整屏 undefined，改为只说明原因。
+  const statusKnown = Object.keys(state.patch_status || {}).length > 0;
+  if (!statusKnown) {
+    out.push(`  补丁 状态未知（宿主目录尚未解开，共 ${core.ALL_PATCHES.length} 条）`);
+    out.push("        在界面点「应用」会自动解开 app.asar，或解开后重跑 --status");
+  } else {
+    out.push(`  补丁 ${state.patches_applied}/${core.ALL_PATCHES.length} 已清洗, ${state.patches_pending} 待清洗`);
+    for (const p of core.ALL_PATCHES) {
+      const s = state.patch_status[p.id];
+      const mark = s === "applied" ? "✓" : s === "pending" ? "✗" : "·";
+      out.push(`    ${mark} [#${String(p.id).padEnd(2)}] ${p.name.padEnd(30)} ${p.layer}/${p.layer_en} — ${s || "未知 / unknown"}`);
+    }
   }
   out.push("");
   out.push(`  shim: dsh.cmd=${state.shim_cmd}  dsh.ps1=${state.shim_ps1}  dsh=${state.shim_bin}`);
