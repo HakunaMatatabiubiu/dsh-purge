@@ -1,3 +1,23 @@
+# 1.1.71-rc3.2
+
+## 中文
+
+- 版本 **1.1.71-rc3.2**。
+- 修红队模式在 0.2.2-rc.3 上「加载失败」：已部署的用户预设里仍留着 `toolFilter` 和 `@deepseek-ai/dsh-tool-subagent-control/list-agents` 子路径 —— 前者让 `dsh-tool-subagent.apply()` 直接抛 `toolFilter is no longer supported`，后者在 0.2.2 已随 `list_agents` 并进主入口而消失，任意一条都会把整份预设判成 broken，卡片红框、下拉里选不中。
+- `installPreset` 新增 `repairRc3Compat()`：启动时就地修已部署预设 —— 删掉 `toolFilter` 及其 deny 名单、删掉 list-agents 行、`modelSelectionSettings` → `modelSelection`、去掉 0.2.2 已不存在的 `backgroundMode`。幂等，其余用户自定义内容不动。
+- 预设模板同步：`tool-subagent` 的叶子约束改由 `maxDepth: 1` 兜底（`toolFilter` 在 0.2.2 已不可用），顺带清掉重复的转义反引号行。
+- 新增 `tools/verify-redteam-repair.mjs`（`pnpm verify:redteam-preset`）：用旧预设夹具跑 `installPreset()`，再校验 YAML 解析、每行模块可解析（`disabled` 行除外）、关键行 config 过宿主 schema。不依赖客户端，可当回归用。
+- 实机结果：修复后 `$DSH_HOME/redteam/preset-declare.json` 为 `ok: true` / `phase: registered` / `broken: null`（19 行）。
+
+## English
+
+- **1.1.71-rc3.2**.
+- Fix the red-team preset failing to load on 0.2.2-rc.3: the deployed user preset still carried `toolFilter` and the `@deepseek-ai/dsh-tool-subagent-control/list-agents` subpath. The former makes `dsh-tool-subagent.apply()` throw `toolFilter is no longer supported`; the latter disappeared in 0.2.2 when `list_agents` moved into the main entry. Either one marks the whole preset broken — red card, unpickable in the dropdown.
+- `installPreset` gains `repairRc3Compat()`: repairs the deployed preset in place on startup — drops `toolFilter` and its deny list, drops the list-agents row, renames `modelSelectionSettings` to `modelSelection`, removes the now-absent `backgroundMode`. Idempotent; other user edits stay untouched.
+- Preset template follows: leaf-only subagents now rely on `maxDepth: 1` (`toolFilter` is gone in 0.2.2), and a duplicated escaped-backtick line was cleaned up.
+- New `tools/verify-redteam-repair.mjs`: runs `installPreset()` against a stale-preset fixture, then checks YAML parsing, module resolution per row (`disabled` rows exempt), and config validation against the host schema. No client needed; usable as a regression gate.
+- On this machine: `$DSH_HOME/redteam/preset-declare.json` now reads `ok: true` / `phase: registered` / `broken: null` (19 rows).
+
 # 1.1.71-rc3.1
 
 ## 中文
